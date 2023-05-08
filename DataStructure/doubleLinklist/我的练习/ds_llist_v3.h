@@ -40,6 +40,6 @@ int _llist_fetch(const LLIST *llist, void *key, cmp_op *op, void *data);
 
 void *_llist_find(const LLIST *llist, void *key, cmp_op *op);
 
-void _llist_travel(LLIST *llist, void (*fuc)(node_list *data));
+void _llist_travel(LLIST *llist, void (*fuc)(void *data));
 
 #endif

@@ -53,7 +53,6 @@ LLIST *_llist_create(int size)
  * @param 3: 插入方法：有FORWARD_INSERT和BACKWARD_INSERT这两种方法。
  * @return:
  */
-
 int _llist_insert(LLIST *llist, void *data, int method)
 {
     node_list * insert_node = (node_list *)malloc(sizeof(node_list) + llist->size);
@@ -176,11 +175,11 @@ int _llist_fetch(const LLIST *llist, void *key, cmp_op *op, void *data)
     
 }
 
-void _llist_travel(LLIST *llist, void (*fuc)(node_list *data))
+void _llist_travel(LLIST *llist, void (*fuc)(void *data))
 {
     node_list * cur = llist->head.next;
     for(;cur != &llist->head; cur = cur->next)
     {
-        fuc(cur);
+        fuc(cur->data);
     }
 }
