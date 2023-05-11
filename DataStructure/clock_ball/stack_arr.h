@@ -2,7 +2,7 @@
 #ifndef __STACK_ARR_h__
 #define __STACK_ARR_h__
 
-#define STACKSIZE (10)
+#define STACKSIZE (12)
 typedef int datatype;
 
 typedef struct  
