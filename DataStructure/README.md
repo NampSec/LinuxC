@@ -1862,7 +1862,7 @@ static __always_inline void __write_once_size(volatile void *p, void *res, int s
 
 
 ``` c++
-
+link队列
 ```
 
 
@@ -1877,9 +1877,24 @@ static __always_inline void __write_once_size(volatile void *p, void *res, int s
 # 树
 
 ## 二叉树
-``` c++
 
+二叉树的几个概念
+
+深度
+
+度
+
+叶子节点。。。
+
+左子树2*n 右子树2*n+1
+
+总结点：2^n-1
+
+``` c++
+// 顺序存储的二叉树
 ```
+
+
 
 
 ``` c++
