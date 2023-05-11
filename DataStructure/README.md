@@ -1851,7 +1851,7 @@ static __always_inline void __write_once_size(volatile void *p, void *res, int s
 
 
 ``` c++
-
+上面两个代码在我的仓库中都有，就不重复复制粘贴了
 ```
 
 
@@ -1867,14 +1867,106 @@ link队列
 
 
 ``` c++
-
+上面两个代码在我的仓库中都有，就不重复复制粘贴了
 ```
 
 栈和队列的引用
 
 简单的计算器规划好优先级就能进行扩展
 
+球钟算法
+
+上面两个代码在我的仓库中都有，我就不重复复制粘贴了。
+
+## 动态库和静态库的实现
+
+**在gcc中使用-m时，会优先匹配动态库**
+
+例如
+
+```
+gcc -lllist 会优先匹配libllist.so.x这个动态库，而不是libllist.a.x这个静态库
+```
+
+静态库：
+
+`libxx.a`,其中xx代指库名，使用gcc链接时只需要-lxx即可
+
+静态库的生成
+
+```shell
+ar -cr libxx.a yyy.o # 从yyy.o文件生成静态库
+# yyy.o文件的生成，直接gcc -c xx.c即可生成
+```
+
+静态库的发布
+
+将.h和.a文件分别复制到
+
+```shell
+/usr/local/include
+/usr/local/lib
+```
+
+静态库的使用
+
+```shell
+gcc -L/usr/local/lib -o main mian.c -lxx # 其中-lxx 这个必须要写在最后
+```
+
+ldd命令的使用
+
+```shell
+# ldd 命令可以打印出该二进制可执行文件的依赖动态库，使用如下
+ldd ./main
+```
+
+动态库
+
+`libxx.so`
+
+动态库的生成
+
+```shell
+gcc -shared -fpic -o libxx.so yyy.c
+```
+
+动态库的发布
+
+将.h和.a文件分别复制到
+
+```shell
+/usr/local/include
+/usr/local/lib
+```
+
+1. 在/etc/ld.so.conf中添加上动态库所在的路径
+2. /sbin/ldconfig 执行来重读修改后的配置文件
+
+动态库的使用
+
+```shell
+gcc -I /usr/local/include -L /usr/local/lib -o xxx... -lxx
+```
+
+对于非root用户发布动态库，可以将其复制到当前用户的文件下后添加路径到环境变量中。
+
+```shell
+cp xx.so ~/lib
+export LD_LIBRARY_PATH=~/lib
+```
+
+在动态库中若动态库之中有相互的依赖关系，例如libstack依赖于libllist，则若链接libstack时需要按顺序，并且将libstack所依赖的库也写入-l中，即
+
+```shell
+gcc -lstack -lllist #被依赖的库写在后面
+```
+
+
+
 # 树
+
+
 
 ## 二叉树
 
@@ -1891,14 +1983,12 @@ link队列
 总结点：2^n-1
 
 ``` c++
-// 顺序存储的二叉树
+// 顺序存储的二叉树，详细代码见我的仓库中
 ```
 
 
-
-
 ``` c++
-
+// 链式存储的二叉树，详细代码见我的仓库中
 ```
 
 
