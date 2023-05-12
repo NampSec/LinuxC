@@ -5,36 +5,51 @@
 #include <fcntl.h>
 #include <linux/fb.h>
 #include <sys/mman.h>
+#include "api.h"
 
-void draw_point(int x, int y, int r, int g, int b) {
+void open_framebuffer(int *fd)
+{
     // Open the framebuffer device
-    int fd = open("/dev/fb0", O_RDWR);
 
-    if (fd == -1) {
-        return;
+    *fd = open("/dev/fb0", O_RDWR);
+
+    if (*fd == -1)
+    {
+        fprintf(stderr, "open_framebuffer failed\n");
+        exit(1);
     }
+}
+void close_framebuffer(int *fd)
+{
+    close(*fd);
+}
+void draw_point(int *fd, int x, int y, int r, int g, int b)
+{
 
     // Get the fixed screen information
     struct fb_fix_screeninfo fix_info;
 
-    if (ioctl(fd, FBIOGET_FSCREENINFO, &fix_info) == -1) {
-        close(fd);
+    if (ioctl(*fd, FBIOGET_FSCREENINFO, &fix_info) == -1)
+    {
+        close(*fd);
         return;
     }
 
     // Get the variable screen information
     struct fb_var_screeninfo var_info;
 
-    if (ioctl(fd, FBIOGET_VSCREENINFO, &var_info) == -1) {
-        close(fd);
+    if (ioctl(*fd, FBIOGET_VSCREENINFO, &var_info) == -1)
+    {
+        close(*fd);
         return;
     }
 
     // Map the framebuffer memory into user space
-    char* fb_mem = (char*)mmap(0, fix_info.smem_len, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    char *fb_mem = (char *)mmap(0, fix_info.smem_len, PROT_READ | PROT_WRITE, MAP_SHARED, *fd, 0);
 
-    if (fb_mem == (char*)-1) {
-        close(fd);
+    if (fb_mem == (char *)-1)
+    {
+        close(*fd);
         return;
     }
 
@@ -44,18 +59,16 @@ void draw_point(int x, int y, int r, int g, int b) {
     long location = (x + var_info.xoffset) * bpp +
                     (y + var_info.yoffset) * fix_info.line_length;
 
-    *(fb_mem + location) = b; // Blue
+    *(fb_mem + location) = b;     // Blue
     *(fb_mem + location + 1) = g; // Green
     *(fb_mem + location + 2) = r; // Red
 
     // Unmap the framebuffer memory and close the device
     munmap(fb_mem, fix_info.smem_len);
-    close(fd);
 }
 
-
-
-void set_echo_on() {
+void set_echo_on()
+{
     // Get the terminal attributes
     struct termios term;
     tcgetattr(STDIN_FILENO, &term);
@@ -67,7 +80,8 @@ void set_echo_on() {
     tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-void set_echo_off() {
+void set_echo_off()
+{
     // Get the terminal attributes
     struct termios term;
     tcgetattr(STDIN_FILENO, &term);
@@ -79,12 +93,10 @@ void set_echo_off() {
     tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-
-void get_terminal_size(int* width, int* height) {
+void get_terminal_size(int *width, int *height)
+{
     struct winsize ws;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
     *width = ws.ws_col;
     *height = ws.ws_row;
 }
-
-
