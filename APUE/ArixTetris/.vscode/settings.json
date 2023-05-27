@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "game.h": "c"
+        "game.h": "c",
+        "ioctl.h": "c",
+        "api.h": "c"
     }
 }
