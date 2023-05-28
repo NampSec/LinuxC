@@ -30,7 +30,7 @@ void close_framebuffer(int *fd)
 {
     close(*fd);
 }
-void draw_point(int *fd, int x, int y, int r, int g, int b)
+void draw_point(int *fd, int x, int y, unsigned int color)
 {
 
     // Get the fixed screen information
@@ -65,15 +65,15 @@ void draw_point(int *fd, int x, int y, int r, int g, int b)
     long location = (x + var_info.xoffset) * bpp +
                     (y + var_info.yoffset) * fix_info.line_length;
 
-    *(fb_mem + location) = b;     // Blue
-    *(fb_mem + location + 1) = g; // Green
-    *(fb_mem + location + 2) = r; // Red
+    *(fb_mem + location) = color & 0xff;             // Blue
+    *(fb_mem + location + 1) = (color >> 8) & 0xff;  // Green
+    *(fb_mem + location + 2) = (color >> 16) & 0xff; // Red
 
     // Unmap the framebuffer memory and close the device
     munmap(fb_mem, fix_info.smem_len);
 }
 
-void clear_screen(int *fd, int r, int g, int b)
+void clear_screen(int *fd, unsigned int color)
 {
     // Get the fixed screen information
     struct fb_fix_screeninfo fix_info;
@@ -112,15 +112,15 @@ void clear_screen(int *fd, int r, int g, int b)
         {
             location = (px + var_info.xoffset) * bpp +
                        (py + var_info.yoffset) * fix_info.line_length;
-            *(fb_mem + location) = b;     // Blue
-            *(fb_mem + location + 1) = g; // Green
-            *(fb_mem + location + 2) = r; // Red
+            *(fb_mem + location) = color & 0xff;             // Blue
+            *(fb_mem + location + 1) = (color >> 8) & 0xff;  // Green
+            *(fb_mem + location + 2) = (color >> 16) & 0xff; // Red
         }
     }
     // Unmap the framebuffer memory and close the device
     munmap(fb_mem, fix_info.smem_len);
 }
-void draw_line(int *fd, int x, int y, int x2, int y2, int r, int g, int b)
+void draw_line(int *fd, int x, int y, int x2, int y2, unsigned int color)
 {
 
     // Get the fixed screen information
@@ -161,9 +161,9 @@ void draw_line(int *fd, int x, int y, int x2, int y2, int r, int g, int b)
         py = y + (double)i / (double)max_delta * (y2 - y);
         location = (px + var_info.xoffset) * bpp +
                    (py + var_info.yoffset) * fix_info.line_length;
-        *(fb_mem + location) = b;     // Blue
-        *(fb_mem + location + 1) = g; // Green
-        *(fb_mem + location + 2) = r; // Red
+        *(fb_mem + location) = color & 0xff;             // Blue
+        *(fb_mem + location + 1) = (color >> 8) & 0xff;  // Green
+        *(fb_mem + location + 2) = (color >> 16) & 0xff; // Red
     }
     // Unmap the framebuffer memory and close the device
     munmap(fb_mem, fix_info.smem_len);
@@ -204,7 +204,7 @@ void get_terminal_size(int *width, int *height)
 }
 
 // 这个一定要求x2 >= x1, y2 >= y1
-void draw_rect(int *fd, int x, int y, int x2, int y2, int r, int g, int b)
+void draw_rect(int *fd, int x, int y, int x2, int y2, unsigned int color)
 {
 
     // Get the fixed screen information
@@ -244,9 +244,9 @@ void draw_rect(int *fd, int x, int y, int x2, int y2, int r, int g, int b)
         {
             location = (px + var_info.xoffset) * bpp +
                        (py + var_info.yoffset) * fix_info.line_length;
-            *(fb_mem + location) = b;     // Blue
-            *(fb_mem + location + 1) = g; // Green
-            *(fb_mem + location + 2) = r; // Red
+            *(fb_mem + location) = color & 0xff;             // Blue
+            *(fb_mem + location + 1) = (color >> 8) & 0xff;  // Green
+            *(fb_mem + location + 2) = (color >> 16) & 0xff; // Red
         }
     }
     // Unmap the framebuffer memory and close the device
