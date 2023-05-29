@@ -46,25 +46,28 @@ int main()
         case ' ':
             turn_diamond = matrix_turn_right(diamond);
             convert_blockpoint_respoint(&cur_diamond_pos, &temp);
-            open_framebuffer(&fd);
-            draw_rect(&fd, temp.x, temp.y - BLOCK_RES_SIZE * (DIAMOND_MATRIX_SIZE), temp.x + BLOCK_RES_SIZE * DIAMOND_MATRIX_SIZE, temp.y, BACKGROUND_COLOR);
-            close_framebuffer(&fd);
-            refresh_diamond(temp.x, temp.y, 0xffff, turn_diamond, 0, 0);
+            refresh_diamond(temp.x, temp.y + BLOCK_RES_SIZE, diamond, turn_diamond, 0, 0, 0);
             diamond = turn_diamond;
             break;
         case 'a':
         case 'A':
+            cur_diamond_pos.x -= 1;
+            convert_blockpoint_respoint(&cur_diamond_pos, &temp);
+            refresh_diamond(temp.x, temp.y + BLOCK_RES_SIZE , diamond, diamond, 1, 0, 0);
             break;
         case 'd':
         case 'D':
-            break;
-        case 's':
-        case 'S':
-            while (update_screen());
+            cur_diamond_pos.x += 1;
+            convert_blockpoint_respoint(&cur_diamond_pos, &temp);
+            refresh_diamond(temp.x, temp.y + BLOCK_RES_SIZE , diamond, diamond, -1, 0, 0);
             break;
         case 'q':
         case 'Q':
             flag = 0;
+            break;
+        case 's':
+        case 'S':
+            update_screen();
             break;
         default:
             break;

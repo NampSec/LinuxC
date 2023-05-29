@@ -253,7 +253,16 @@ static void draw_block_res(int x, int y, unsigned int color)
 }
 
 // 擦除旧的方块，创建新的方块
-void refresh_diamond(int x, int y, unsigned int old_diamond, unsigned int new_diamond, unsigned int fresh_offset, unsigned int color)
+/*
+*@ Description: 该函数用于更新diamond的痕迹
+* @param 1: 新方块new_diamond所要画的x轴坐标
+* @param 2: 新方块new_diamond所要画的y轴坐标
+* @param 3: 代表旧的方块，根据该值有条件的消除原来diamond的上一帧，用0xfffff表示消除4x4的方块
+* @param 4: x_offset 在x - x_offset和 y - y_offset处消除上一帧
+* @return: 
+*/
+
+void refresh_diamond(int x, int y, unsigned int old_diamond, unsigned int new_diamond, int x_offset, int y_offset, unsigned int color)
 {
     for (int i = 0; i < 4; i++)
     {
@@ -261,7 +270,7 @@ void refresh_diamond(int x, int y, unsigned int old_diamond, unsigned int new_di
         {
             if (old_diamond & (0x1 << ((i * 4) + j)))
             {
-                draw_block_res(x + j * BLOCK_RES_SIZE, y - (i + fresh_offset) * BLOCK_RES_SIZE, BACKGROUND_COLOR); // 擦除旧的方块
+                draw_block_res(x + (x_offset + j) * BLOCK_RES_SIZE, y - (i + y_offset) * BLOCK_RES_SIZE, BACKGROUND_COLOR); // 擦除旧的方块
             }
         }
     }
@@ -397,7 +406,7 @@ int update_screen()
             cur_diamond_pos.y -= 1;
             convert_blockpoint_respoint(&cur_diamond_pos, &temp);
             // x = x +/- 1; 根据输入将方块左移或者右移
-            refresh_diamond(temp.x, temp.y + BLOCK_RES_SIZE, 0xffff, diamond, 1, 0);
+            refresh_diamond(temp.x, temp.y + BLOCK_RES_SIZE, diamond, diamond, 0, 1, 0);
             return 1;
         }
     }

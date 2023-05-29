@@ -26,7 +26,7 @@ void update_nextblock();
 void game_initialized(void);
 unsigned int matrix_turn_left(unsigned int diamond);
 unsigned int matrix_turn_right(unsigned int diamond);
-void refresh_diamond(int x, int y, unsigned int old_diamond, unsigned int new_diamond, unsigned int fresh_offset, unsigned int color);
+void refresh_diamond(int x, int y, unsigned int old_diamond, unsigned int new_diamond, int x_offset, int y_offset, unsigned int color);
 void convert_blockpoint_respoint(point const * const block_point, point * res_point);
 
 #endif

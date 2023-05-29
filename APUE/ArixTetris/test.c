@@ -6,13 +6,8 @@
 int main() {
     int ch;
     
-    while (1)
-    {
-        ch = getchar();
-        printf("%d\n", ch);
-        if(ch == ' ')
-            printf("input the space\n");
-    }
+    unsigned int test = 10;
+    printf("Testing %d\n", test - 1);
     
     return 0;
 }
