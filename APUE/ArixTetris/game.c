@@ -292,6 +292,17 @@ void refresh_diamond(int x, int y, unsigned int old_diamond, unsigned int new_di
 // 判断落下会不会碰到下面的东西
 static int diamond_reach_bottom(char block_map[][GAME_X_RES / BLOCK_RES_SIZE], unsigned int diamond, unsigned int x, unsigned int y)
 {
+    for (int  i = 0; i < 16; i++)
+    {
+        if(diamond & 0x1 << i)
+            i++;
+    }
+    for (int j = 0; j < i; j++)
+    {
+        
+    }
+
+
     unsigned int diamond_boottom_y[4];
     if (y == 0) return 1; // 已经触底
     // 解析出diamond四列的各个底部坐标
@@ -308,7 +319,7 @@ static int diamond_reach_bottom(char block_map[][GAME_X_RES / BLOCK_RES_SIZE], u
 
     for (i = 0; i < 4; i++)
     {
-        if(block_map[GAME_Y_RES / BLOCK_RES_SIZE][x + i] + 1 == diamond_boottom_y[i])
+
             return 1;
     }
     return 0;
@@ -375,7 +386,7 @@ int update_screen()
 {
     // block map 只描述下面那一堆不会动的东西
     // block map 中最上面一列描述的是该map各个列的顶点值
-    static char block_map[GAME_Y_RES / BLOCK_RES_SIZE + 1][GAME_X_RES / BLOCK_RES_SIZE] = {0};
+    static char block_map[GAME_Y_RES / BLOCK_RES_SIZE][GAME_X_RES / BLOCK_RES_SIZE] = {0};
     static int flag = 0;     // 如果flag = 1, 代表还在下落中，暂时不需要刷出新方块
 
     extern unsigned int x_res, y_res;
